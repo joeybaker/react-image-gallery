@@ -1,3 +1,20 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [@joeybaker/react-image-gallery](#@joeybakerreact-image-gallery)
+  - [Install](#install)
+  - [Demo & Examples](#demo-&-examples)
+  - [Use](#use)
+    - [CSS Modules](#css-modules)
+    - [JS](#js)
+- [Props](#props)
+- [functions](#functions)
+- [Notes](#notes)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # @joeybaker/react-image-gallery
 
 Responsive image gallery, slideshow, carousel

@@ -1,159 +1,224 @@
-'use strict';
+import React, {Component} from 'react'
+import ReactDOM from 'react-dom'
+import autobind from 'autobind-decorator'
+import {fromJS} from 'immutable'
+import Perf from 'react-addons-perf'
+import a11y from 'react-a11y'
+a11y(React)
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import LinkedStateMixin from 'react-addons-linked-state-mixin';
+import ImageGallery from '../src/image-gallery.js'
+import Img from './img.js'
 
-import ImageGallery from '../src/ImageGallery.react';
+Perf.start()
+const images = fromJS([
+  {
+    image: 'http://lorempixel.com/1000/600/nature/1/'
+    , alt: 'nature'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/1/'
+    , imageClass: 'featured-slide'
+    , thumbnailClass: 'featured-thumb'
+    , description: 'Custom class for slides & thumbnails'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/2/'
+    , alt: 'nature again'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/2/'
+    , description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/3/'
+    , alt: 'nature again 3'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/3/'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/4/'
+    , alt: 'nature again 4'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/4/'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/5/'
+    , alt: 'nature again 5'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/5/'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/6/'
+    , alt: 'nature again 6'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/6/'
+  }
+  , {
+    image: 'http://lorempixel.com/1000/600/nature/7/'
+    , alt: 'nature again 7'
+    , thumbnail: 'http://lorempixel.com/250/150/nature/7/'
+  }
+])
 
-const App = React.createClass({
+const DEFAULT_SLIDE_INTERVAL = 4000
 
-  mixins: [LinkedStateMixin],
+class App extends Component {
 
-  getInitialState() {
-    return {
-      isPlaying: false,
-      slideInterval: 4000,
-      showThumbnails: true,
-      showIndex: false,
-      showNav: true,
-      showBullets: true
-    };
-  },
+  state = {
+    isPlaying: false
+    , slideInterval: DEFAULT_SLIDE_INTERVAL
+    , showThumbnails: true
+    , showIndex: false
+    , showNav: true
+    , showBullets: true
+  }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     if (this.state.slideInterval !== prevState.slideInterval) {
       // refresh setInterval
-      this._pauseSlider();
-      this._playSlider();
+      this._pauseSlider()
+      this._playSlider()
     }
-  },
+  }
 
-  _pauseSlider() {
-    if (this._imageGallery) {
-      this._imageGallery.pause();
-      this.setState({isPlaying: false});
+  @autobind
+  _pauseSlider () {
+    if (this.refs.imageGallery) {
+      this.refs.imageGallery.pause()
+      this.setState({isPlaying: false})
     }
-  },
+  }
 
-  _playSlider() {
-    if (this._imageGallery) {
-      this._imageGallery.play();
-      this.setState({isPlaying: true});
+  @autobind
+  _playSlider () {
+    if (this.refs.imageGallery) {
+      this.refs.imageGallery.play()
+      this.setState({isPlaying: true})
     }
-  },
+  }
 
-  render() {
-    const images = [
-      {
-        original: 'http://lorempixel.com/1000/600/nature/1/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
-        originalClass: 'featured-slide',
-        thumbnailClass: 'featured-thumb',
-        description: 'Custom class for slides & thumbnails'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/2/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/2/',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/3/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/4/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/4/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/5/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/5/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/6/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/6/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/nature/7/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/7/'
-      }
-    ];
+  @autobind
+  onChangeSlideInterval ({target: {value}}) {
+    this.setState({slideInterval: value})
+  }
 
+  @autobind
+  onChangeShowBullets ({target: {checked}}) {
+    this.setState({showBullets: checked})
+  }
+
+  @autobind
+  onChangeShowThumbnails ({target: {checked}}) {
+    this.setState({showThumbnails: checked})
+  }
+
+  @autobind
+  onChangeShowNav ({target: {checked}}) {
+    this.setState({showNav: checked})
+  }
+
+  @autobind
+  onChangeShowIndex ({target: {checked}}) {
+    this.setState({showIndex: checked})
+  }
+
+  render () {
     return (
-
-      <section className='app'>
+      <div className="app">
         <ImageGallery
-          ref={(i) => this._imageGallery = i}
+          ref="imageGallery"
           items={images}
           lazyLoad={false}
           showBullets={this.state.showBullets}
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
-          slideInterval={parseInt(this.state.slideInterval)}
+          slideInterval={parseInt(this.state.slideInterval, 10)}
           autoPlay={this.state.isPlaying}
+          Img={<Img />}
         />
 
-        <div className='app-sandbox'>
+        <div className="app-sandbox">
 
           <h2> Playground </h2>
 
           <ul>
             <li>
-              <a
+              <button
                 className={'app-button ' + (this.state.isPlaying ? 'active' : '')}
-                onClick={this._playSlider}>
+                onClick={this._playSlider}
+                aria-label="play"
+              >
                 Play
-              </a>
+              </button>
             </li>
             <li>
-            <a
-              className={'app-button ' + (!this.state.isPlaying ? 'active' : '')}
-              onClick={this._pauseSlider}>
-              Pause
-            </a>
+              <button
+                className={'app-button ' + (!this.state.isPlaying ? 'active' : '')}
+                onClick={this._pauseSlider}
+                aria-label="pause"
+              >
+                Pause
+              </button>
             </li>
             <li>
-              <div>Slide interval</div>
-              <input
-                type='text'
-                placeholder='SlideInterval'
-                valueLink={this.linkState('slideInterval')}/>
+              <label>
+                <div>Slide interval</div>
+                <input
+                  type="text"
+                  placeholder="SlideInterval"
+                  value={this.state.slideInterval}
+                  onChange={this.onChangeSlideInterval}
+                />
+              </label>
             </li>
             <li>
-              <input
-                type='checkbox'
-                checkedLink={this.linkState('showBullets')}/>
-                show bullets?
+              <label>
+                <input
+                  type="checkbox"
+                  checked={this.state.showBullets}
+                  onChange={this.onChangeShowBullets}
+                />
+                  show bullets?
+              </label>
             </li>
             <li>
-              <input
-                type='checkbox'
-                checkedLink={this.linkState('showThumbnails')}/>
-                show Thumbnails?
+              <label>
+                <input
+                  type="checkbox"
+                  checked={this.state.showThumbnails}
+                  onChange={this.onChangeShowThumbnails}
+                />
+                  show Thumbnails?
+              </label>
             </li>
             <li>
-              <input
-                type='checkbox'
-                checkedLink={this.linkState('showNav')}/>
-                show Navigation?
+              <label>
+                <input
+                  type="checkbox"
+                  checked={this.state.showNav}
+                  onChange={this.onChangeShowNav}
+                />
+                  show Navigation?
+              </label>
             </li>
             <li>
-              <input
-                type='checkbox'
-                checkedLink={this.linkState('showIndex')}/>
-                show Index?
+              <label>
+                <input
+                  type="checkbox"
+                  checked={this.state.showIndex}
+                  onChange={this.onChangeShowIndex}
+                />
+                  show Index?
+              </label>
             </li>
           </ul>
 
         </div>
-      </section>
-    );
+      </div>
+    )
   }
+}
 
-});
 
-
-(function() {
-  ReactDOM.render(<App/>, document.getElementById('container'));
-})();
+(function renderApp () {
+  ReactDOM.render(<App/>, document.getElementById('app'), () => {
+    Perf.stop()
+    console.info('Wasted')
+    Perf.printWasted()
+    // console.info('DOM')
+    // Perf.printDOM()
+  })
+}())

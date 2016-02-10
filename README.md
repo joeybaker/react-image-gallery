@@ -1,14 +1,26 @@
-# react-image-gallery
+# @joeybaker/react-image-gallery
 
 Responsive image gallery, slideshow, carousel
+
+**THIS IS A FORK**
+It adds:
+
+* immutable props for `items` so that we can pure render
+* a `theme` prop which allows you to add your own CSS if you don't like the defaults
+* [css-modules](https://github.com/css-modules/) compatible CSS
+* pureRender all the way down, for performance
+* fully ARIA compliant
+* allows a custom image element, so you can provide `srcSet` or use `<picture>` or whatever you'd like. Responsive images for the win!
 
 ## Install
 
 ```sh
-npm install react-image-gallery
+npm install @joeybaker/react-image-gallery
 ```
 
 ## Demo & Examples
+
+**NOTE**: this is the original demo, it shows all the user-facing functionality this fork.
 
 Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
@@ -18,60 +30,37 @@ To build the example locally, run:
 npm install
 ```
 ```
-gulp dev
+npm start
 ```
 
-You might need to run the following command if you do not have gulp installed globally.
-
-```
-npm install --global gulp
-```
-
-Then open [`localhost:8001`](http://localhost:8001) in a browser.
+Then open [`localhost:9966`](http://localhost:9966) in a browser.
 
 
 ## Use
 
-### SASS
-
-```
-@import "../node_modules/react-image-gallery/src/ImageGallery";
-```
-
-### CSS
-
-```
-<link rel="stylesheet" href="/image-gallery.css"/>
-```
+### CSS Modules
+Use [CSS Modules](https://github.com/css-modules/) to build.
 
 ### JS
 
 ```js
-var ImageGallery = require('react-image-gallery');
+var ImageGallery = require('react-image-gallery')
 
 var images = [
   {
-    original: 'http://lorempixel.com/1000/600/nature/1/',
-    thumbnail: 'http://lorempixel.com/250/150/nature/1/',
-    originalClass: 'featured-slide',
-    thumbnailClass: 'featured-thumb',
-    originalAlt: 'original-alt',
-    thumbnailAlt: 'thumbnail-alt',
-    description: 'Optional description...'
-  },
-  {
-    original: 'http://lorempixel.com/1000/600/nature/2/',
-    thumbnail: 'http://lorempixel.com/250/150/nature/2/'
-  },
-  {
-    original: 'http://lorempixel.com/1000/600/nature/3/',
-    thumbnail: 'http://lorempixel.com/250/150/nature/3/'
+    image: PropTypes.string.isRequired
+    , alt: PropTypes.string.isRequired
+    , thumbnail: PropTypes.string
+    , thumbnailAlt: PropTypes.string
+    , imageClass: PropTypes.string
+    , thumbnailClass: PropTypes.string
+    , description: PropTypes.string
   }
-];
+]
 
 handleSlide: function(index) {
   console.log('Slid to ' + index);
-},
+}
 
 render: function() {
   return (
@@ -79,15 +68,16 @@ render: function() {
       items={images}
       autoPlay={true}
       slideInterval={4000}
-      onSlide={this.handleSlide}/>
-  );
+      onSlide={this.handleSlide}
+    />
+  )
 }
 
 ```
 
 # Props
 
-* `items`: (required) Array of images,
+* `items`: (required) Immutable list of images,
 * `lazyLoad`: Boolean, default `true`
 * `showThumbnails`: Boolean, default `true`
 * `showNav`: Boolean, default `true`
@@ -102,6 +92,7 @@ render: function() {
 * `disableScrolling`: Boolean, default `false`
 * `onSlide`: Function, `callback(index)`
 * `onClick`: Function, `callback(event)`
+* `Img`: React Element
 
 
 # functions

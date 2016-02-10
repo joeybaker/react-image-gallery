@@ -286,7 +286,7 @@ export default class ImageGallery extends Component {
       const alignment = this._getAlignmentClassName(index)
 
       const imgProps = {
-        className: this.props.server && theme.slideLoaded
+        className: this.props.server ? theme.slideLoaded : ''
         , src: item.get('image')
         , alt: item.get('alt')
         , onLoad: this._handleImageLoad
@@ -296,7 +296,7 @@ export default class ImageGallery extends Component {
       const slide = (
         <div
           key={index}
-          className={`${alignment} ${item.get('imageClass')}`}
+          className={`${alignment} ${item.get('imageClass') || ''}`}
           onClick={this.props.onClick}
           onTouchStart={this.props.onClick}
         >
@@ -318,8 +318,8 @@ export default class ImageGallery extends Component {
 
       if (this.props.showThumbnails) {
         const thumbnailProps = {
-          src: item.get('thumbnail')
-          , alt: item.get('thumbnailAlt') || `${item.get('alt')} thumbnail`
+          src: item.get('thumbnail') || item.get('image')
+          , alt: item.get('thumbnailAlt') || `${item.get('alt') || ''} thumbnail`
           , className: isActive
             ? theme.thumbnailImageActive
             : theme.thumbnailImage
@@ -333,7 +333,7 @@ export default class ImageGallery extends Component {
             className={`
               ${isActive
                 ? theme.thumbnailActive
-                : theme.thumbnail} ${item.get('thumbnailClass')}`}
+                : theme.thumbnail} ${item.get('thumbnailClass') || ''}`}
             onClick={this.slideToIndex}
             label={`move to ${item.get('alt')}`}
           >
